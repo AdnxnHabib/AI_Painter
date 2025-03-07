@@ -26,7 +26,7 @@ myhandDetector = htm.HandDetector(min_detection_confidence=0.85)
 
 # Load the trained model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model_path = "mnist_cnn_model.pth"  # Update this with your model path
+model_path = "mnist_cnn_model.pth" 
 model = MNISTClassifier().to(device)
 model.load_state_dict(torch.load(model_path, map_location=device))
 model.eval()
@@ -74,6 +74,8 @@ def preprocess_drawing_for_prediction(canvas):
     return normalized, display_img
 
 def make_prediction(canvas):
+    drawing_mask = cv2.inRange(canvas, (255, 255, 255), (255, 255, 255))
+    canvas = cv2.bitwise_and(canvas, canvas, mask=drawing_mask)
     processed_img, display_img = preprocess_drawing_for_prediction(canvas)
     if processed_img is not None:
         predicted_digit, confidence_scores = predict_digit(model, processed_img, device)
@@ -130,18 +132,17 @@ while True:
             # Update points for next frame
             xp, yp = x1, y1
     else:
-        # Reset previous points if no hand detected
         xp, yp = 0, 0
     
-    # Display mode and prediction on the display canvas
+
     cv2.putText(displayCanvas, f"Mode: {current_mode}", (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
     
     if predictionResult is not None:
         cv2.putText(displayCanvas, f"Prediction: {predictionResult}", (10, 650), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 3)
     
     # Show frames
-    cv2.imshow("Hand Tracking", img)  # Show camera with hand tracking
-    cv2.imshow("Drawing Canvas", displayCanvas)  # Show the black canvas with drawing
+    cv2.imshow("Hand Tracking", img) 
+    cv2.imshow("Drawing Canvas", displayCanvas) 
     
     if preprocessed_display is not None:
         cv2.imshow("Preprocessed Image", preprocessed_display)
@@ -151,6 +152,7 @@ while True:
     
     # Press 'p' to predict
     if key == ord('p'):
+        
         predictionResult, preprocessed_display = make_prediction(imgCanvas)
     
     # Press 'c' to clear canvas
