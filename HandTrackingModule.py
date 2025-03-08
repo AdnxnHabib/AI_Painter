@@ -26,14 +26,14 @@ class HandDetector():
     
     def findHands(self, img, draw=True):
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        self.results = self.hands.process(imgRGB)
-        if self.results.multi_hand_landmarks:
+        self.results = self.hands.process(imgRGB) # find a hand 
+        if self.results.multi_hand_landmarks: 
             for handlms in self.results.multi_hand_landmarks: # represents one detected hand -> each hand has 21 landmarks associated with it
                 if draw:
                     self.mpDraw.draw_landmarks(img, handlms, mpHands.HAND_CONNECTIONS); 
         return img
 
-    def findPosition(self, img, handNo=0, draw=True):
+    def findPosition(self, img, handNo=0, draw=True): # gets the landmark list 
           lmlist = []
           if self.results.multi_hand_landmarks: 
             myhandlms = self.results.multi_hand_landmarks[handNo] # selects an indiviual hand and represents all 21 of that hands landmarks

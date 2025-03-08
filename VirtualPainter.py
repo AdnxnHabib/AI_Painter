@@ -35,12 +35,11 @@ def preprocess_drawing_for_prediction(canvas):
     """
     Process the drawing canvas into a format suitable for the MNIST model
     """
-    # Get a copy of the canvas and convert to grayscale
     drawing = canvas.copy()
-    drawing_gray = cv2.cvtColor(drawing, cv2.COLOR_BGR2GRAY)
+    drawing_gray = cv2.cvtColor(drawing, cv2.COLOR_BGR2GRAY) # convert to gray scale
     
     # Find the bounding box of the drawing
-    nonzero = cv2.findNonZero(drawing_gray)
+    nonzero = cv2.findNonZero(drawing_gray) # fomd all non-zero pixels (the digit)
     if nonzero is None:
         # No drawing found
         return None
@@ -93,15 +92,13 @@ imgCanvas = instructions.copy()
 preprocessed_display = None
 
 while True:
-    # Capture webcam frame
     success, img = cap.read()
-    img = cv2.flip(img, 1)  # Flip the camera for natural drawing
+    img = cv2.flip(img, 1)  # Flip camera 
     
     # Find hand landmarks
     img = myhandDetector.findHands(img)
     lmList = myhandDetector.findPosition(img, draw=False)
     
-    # Create a display canvas (separate from drawing canvas)
     displayCanvas = imgCanvas.copy()
     
     current_mode = "Idle"
@@ -129,7 +126,6 @@ while True:
             # Draw white line on the black canvas
             cv2.line(imgCanvas, (xp, yp), (x1, y1), (255, 255, 255), 15)
             
-            # Update points for next frame
             xp, yp = x1, y1
     else:
         xp, yp = 0, 0
@@ -147,18 +143,15 @@ while True:
     if preprocessed_display is not None:
         cv2.imshow("Preprocessed Image", preprocessed_display)
     
-    # Check for keyboard input
-    key = cv2.waitKey(1) & 0xFF
-    
-    # Press 'p' to predict
+    key = cv2.waitKey(1) & 0xFF # keyboard input
+
     if key == ord('p'):
         
         predictionResult, preprocessed_display = make_prediction(imgCanvas)
     
-    # Press 'c' to clear canvas
     elif key == ord('c'):
         imgCanvas = np.zeros((720, 1280, 3), np.uint8)
-        # Re-add instructions
+        # clear text and then re-add instructions
         cv2.putText(imgCanvas, "Press 'p' to predict", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (150, 150, 150), 2)
         cv2.putText(imgCanvas, "Press 'c' to clear", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (150, 150, 150), 2)
         cv2.putText(imgCanvas, "Press 'q' to quit", (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (150, 150, 150), 2)
