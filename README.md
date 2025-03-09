@@ -5,12 +5,13 @@ A real-time handwritten digit recognition application using PyTorch and OpenCV.
 This application allows users to draw digits on a canvas and have them classified in real-time using a convolutional neural network trained on the MNIST dataset. 
 
 ## Requirements
-
-Python 3.6+
-PyTorch
-OpenCV (cv2)
-MediaPipe
-NumPy
+<ul>
+<li> Python 3.6+ </li>
+<li> PyTorch  </li>
+<li> OpenCV (cv2) </li>
+<li> MediaPipe </li>
+<li> NumPy </li>
+</ul>
 
 ## Usage
 
