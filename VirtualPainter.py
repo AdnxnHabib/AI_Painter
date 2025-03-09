@@ -8,15 +8,12 @@ import torch.nn.functional as F
 from torchvision import transforms
 from torchvision.transforms.functional import to_tensor
 
-# Import your model class
 from digitClassifier import MNISTClassifier, predict_digit
 
-# Initialize webcam
 cap = cv2.VideoCapture(0)
 cap.set(3, 1280)  # width
 cap.set(4, 720)   # height
 
-# Initialize variables
 xp, yp = 0, 0
 imgCanvas = np.zeros((720, 1280, 3), np.uint8)  # Black canvas
 predictionResult = None
@@ -50,19 +47,15 @@ def preprocess_drawing_for_prediction(canvas):
     if w < 20 or h < 20:
         return None
     
-    # Crop the drawing
     cropped = drawing_gray[y:y+h, x:x+w]
     
-    # Add padding to make it square (for aspect ratio consistency)
-    size = max(w, h) + 20  # Add padding
+    size = max(w, h) + 20  #  padding
     square = np.zeros((size, size), np.uint8)
-    
-    # Center the drawing in the square
+
     offset_x = (size - w) // 2
     offset_y = (size - h) // 2
     square[offset_y:offset_y+h, offset_x:offset_x+w] = cropped
     
-    # Resize to 28x28 (MNIST size)
     resized = cv2.resize(square, (28, 28), interpolation=cv2.INTER_AREA)
 
     display_size = 140  # 5x the MNIST size for visibility
@@ -83,7 +76,7 @@ def make_prediction(canvas):
         return predicted_digit, display_img
     return None
 
-# Add instructions to the canvas
+# instructions to the canvas
 instructions = imgCanvas.copy()
 cv2.putText(instructions, "Press 'p' to predict", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (150, 150, 150), 2)
 cv2.putText(instructions, "Press 'c' to clear", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (150, 150, 150), 2)
@@ -160,8 +153,7 @@ while True:
         print("Canvas Cleared")
         xp, yp = 0, 0
     
-    # Press 'q' to quit
-    elif key == ord('q'):
+    elif key == ord('q'): # quit 
         break
 
 cap.release()

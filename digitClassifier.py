@@ -13,39 +13,39 @@ np.random.seed(42)
 class MNISTClassifier(nn.Module):
     def __init__(self):
         super(MNISTClassifier, self).__init__()
-        # First convolutional layer -> 
+        # first convolutional layer -> 
         self.conv1 = nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1) 
         self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
         
-        # Second convolutional layer
+        # second convolutional layer
         self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
         self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
         
-        # Third convolutional layer
+        # third convolutional layer
         self.conv3 = nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1)
         
-        # Fully connected layers
+        # fully connected layers
         self.fc1 = nn.Linear(128 * 7 * 7, 128)
         self.dropout1 = nn.Dropout(0.5)
         self.fc2 = nn.Linear(128, 10)
         self.dropout2 = nn.Dropout(0.25)
     
     def forward(self, x):
-        # First conv block
+        # first conv block
         x = F.relu(self.conv1(x)) 
         x = self.pool1(x) # -> 32 feature maps of 14x14
         
-        # Second conv block
+        # second conv block
         x = F.relu(self.conv2(x))
         x = self.pool2(x) # -> 64 feature maps of 7x7
         
-        # Third conv block
+        # third conv block
         x = F.relu(self.conv3(x)) # -> 128 feature maps of 7x7
         
-        # Flatten the output 
+        # flatten the output 
         x = x.view(-1, 128 * 7 * 7) # -> we go from ()
         
-        # Fully connected layers
+        # fully connected layers
         x = F.relu(self.fc1(x))
         x = self.dropout1(x)
         x = self.fc2(x)
@@ -60,17 +60,14 @@ def load_data(batch_size=64):
         transforms.Normalize((0.1307,), (0.3081,))  # MNIST dataset mean and std
     ])
     
-    # Download and load the training data
     train_dataset = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
     test_dataset = datasets.MNIST(root='./data', train=False, download=True, transform=transform)
     
-    # Create data loaders
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     
     return train_loader, test_loader
 
-# Training function
 def train(model, device, train_loader, optimizer, epoch, log_interval=100):
     model.train()
     train_loss = 0
@@ -82,13 +79,10 @@ def train(model, device, train_loader, optimizer, epoch, log_interval=100):
         
         optimizer.zero_grad()
         
-        # Forward pass
         output = model(data)
         
-        # Calculate loss
         loss = F.nll_loss(output, target)
         
-        # Backward pass and optimize
         loss.backward()
         optimizer.step()
         
