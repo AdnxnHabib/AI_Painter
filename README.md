@@ -14,11 +14,12 @@ This application allows users to draw digits on a canvas and have them classifie
 </ul>
 
 ## Usage
-
-Start the application: python VirtualPainter.py
-Draw a digit on the canvas
-View the prediction and confidence score
-Clear the canvas to try another digit
+<ul> 
+<li> Start the application: python VirtualPainter.py </li>
+<li> Draw a digit on the canvas </li>
+<li> View the prediction and confidence score </li>
+<li> Clear the canvas to try another digit </li>
+</ul>
 
 [Hand Detection.pdf](https://github.com/user-attachments/files/19145192/Hand.Detection.pdf)
 
